@@ -107,29 +107,105 @@
 ;(block-values sudoku-board [0 2]) ;=> #{0 5 3 6 8 9}
 ;(block-values sudoku-board [4 5]) ;=> #{0 6 8 3 2}
 
+;(set/difference #{1 2 3} #{2} #{1})
+
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values
+                    (row-values board coord)
+                    (col-values board coord)
+                    (block-values board coord))))
+
+;(valid-values-for sudoku-board [0 0]) ;=> #{}
+;(valid-values-for sudoku-board [0 2]) ;=> #{1 2 4})
 
 (defn filled? [board]
-  nil)
+  (every? identity (for [row (range 0 9)
+                         col (range 0 9)]
+                     (has-value? board [row col]))))
+
+;(filled? sudoku-board)
+;(filled? solved-board)
 
 (defn rows [board]
-  nil)
+  (for [row (range 0 9)]
+    (row-values board [row 0])))
+
+;(rows sudoku-board)
+;(rows solved-board)
+;(row-values solved-board [6 0])
 
 (defn valid-rows? [board]
-  nil)
+  (every? identity (map (fn [vals]
+                          (= all-values vals))
+                          (rows board))))
+
+(valid-rows? solved-board)  ;=> truthy
+(valid-rows? sudoku-board) ;=> falsey
 
 (defn cols [board]
-  nil)
+  (for [col (range 0 9)]
+    (col-values board [0 col])))
+
+;(cols sudoku-board) ;=> [#{5 6 0 8 4 7}
+                    ;    #{3 0 9 6}
+                    ;    #{0 8}
+                    ;    #{0 1 8 4}
+                    ;    #{7 9 0 6 2 1 8}
+                    ;    #{0 5 3 9}
+                    ;    #{0 2}
+                    ;    #{0 6 8 7}
+                    ;    #{0 3 1 6 5 9}]
+;(cols solved-board) ;=> [#{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}
+                    ;    #{1 2 3 4 5 6 7 8 9}]
 
 (defn valid-cols? [board]
-  nil)
+  (every? identity (map (fn [vals]
+                          (= all-values vals))
+                          (cols board))))
+
+;(valid-cols? sudoku-board)
+;(valid-cols? solved-board)
 
 (defn blocks [board]
-  nil)
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
+
+;(blocks sudoku-board) ;=> [#{5 3 0 6 9 8}
+                      ;    #{0 7 1 9 5}
+                      ;    #{0 6}
+                      ;    #{8 0 4 7}
+                      ;    #{0 6 8 3 2}
+                      ;    #{0 3 1 6}
+                      ;    #{0 6}
+                      ;    #{0 4 1 9 8}
+                      ;    #{2 8 0 5 7 9}]
+;(blocks solved-board) ;=> [#{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}
+                      ;    #{1 2 3 4 5 6 7 8 9}])
 
 (defn valid-blocks? [board]
-  nil)
+  (every? identity (map (fn [vals]
+                          (= all-values vals))
+                          (blocks board))))
+
+;(valid-blocks? sudoku-board)
+;(valid-blocks? solved-board)
 
 (defn valid-solution? [board]
   nil)
