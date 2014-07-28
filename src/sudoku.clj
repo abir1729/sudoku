@@ -251,15 +251,16 @@
                      [row col])))))
 
 (defn solve [board]
-  (if (filled? board)
-    (if (valid-solution? board)
-      [board]
-      [])
-    (let [empty-point (find-empty-point board)]
-      (for [val (valid-values-for board empty-point)]
-        (solve (set-value-at board empty-point val))))))
+  (first (filter #(not (nil? %))
+                 (if (filled? board)
+                   (if (valid-solution? board)
+                     [board])
+                   (let [empty-point (find-empty-point board)]
+                     (for [val (valid-values-for board empty-point)]
+                       (solve (set-value-at board empty-point val))))))))
 
-;(solve sudoku-board)
+;(def solved-board-1 (solve sudoku-board))
+;(valid-solution? solved-board-1)
 
 ;(find-empty-point sudoku-board)
 ;(get-in sudoku-board [0 0])
