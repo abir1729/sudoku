@@ -208,13 +208,54 @@
 ;(valid-blocks? solved-board)
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
+
+;(valid-solution? solved-board)  ;=> truthy
+;(valid-solution? sudoku-board) ;=> falsey)
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (let [[x y] coord]
+    (assoc-in board [x y] new-value)))
+
+(def before-change
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
+(def after-change
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 4 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
+;(set-value-at before-change [2 1] 4)
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter #(not (nil? %))
+                 (for [row (range 0 9)
+                       col (range 0 9)]
+                   (if-not (has-value? board [row col])
+                     [row col])))))
+
+;(find-empty-point sudoku-board)
+;(get-in sudoku-board [0 0])
+;(-> (filter #(not (nil? %)) (for [a (range 0 4)
+;      b (range 0 4)]
+;  (if (even? a) [a b])))
+;    first)
 
 (defn solve [board]
   nil)
